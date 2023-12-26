@@ -308,5 +308,5 @@ func main() {
 	//sliceFunc()
 	//mapFunc()
 	//funFunc()
-	closureFunc()
+	//closureFunc()
 }

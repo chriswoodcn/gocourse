@@ -30,6 +30,9 @@ func variables() {
 	fmt.Println(">>>>>>>>>> 定义变量 >>>>>>>>>>")
 	fmt.Printf("全局变量： %d %t %v \n", aaa, bbb, bbb)
 	fmt.Printf("map %v %#v\n", ccc, ccc)
+	for k, v := range ccc {
+		fmt.Printf("key: %v value: %v", k, v)
+	}
 	fmt.Printf("array %v %#v\n", ddd, ddd)
 	fmt.Printf("struct %v %+v %#v\n", person, person, person)
 	pointer := &person
