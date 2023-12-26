@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"math"
+	"reflect"
+	"runtime"
 )
 
 type _vertex struct {
@@ -270,6 +272,16 @@ func funFunc() {
 func compute(fn func(float64, float64) float64) float64 {
 	return fn(3, 4)
 }
+
+// 函数入参 参照js中的apply方法
+func apply(op func(int, int) int, a, b int) int {
+	pointer := reflect.ValueOf(op).Pointer()
+	opName := runtime.FuncForPC(pointer).Name()
+	fmt.Printf("call op name: %s \n", opName)
+	return op(a, b)
+}
+
+// 闭包
 func closureFunc() {
 	//Go 函数可以是一个闭包。闭包是一个函数值，它引用了其函数体之外的变量。
 	//该函数可以访问并赋予其引用的变量的值，换句话说，该函数被这些变量“绑定”在一起。

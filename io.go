@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io"
+	"os"
 	"strings"
 )
 
@@ -18,7 +20,18 @@ func testIoRead() {
 		}
 	}
 }
+func printFile(filename string) {
+	file, err := os.Open(filename)
+	if err != nil {
+		panic("printFile os.OpenFile error ")
+	}
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
+}
+
 func main() {
 	testIoRead()
-
+	printFile("aaa.txt")
 }

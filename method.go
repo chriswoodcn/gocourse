@@ -52,6 +52,15 @@ func (v *__vertex) Scale(f float64) {
 	v.Y = v.Y * f
 }
 
+// 可变参数列表
+func sum2(numbers ...int) int {
+	s := 0
+	for _, v := range numbers {
+		s += v
+	}
+	return s
+}
+
 // Scale
 // 带指针参数的函数必须接受一个指针
 func Scale(v *__vertex, f float64) {
@@ -61,4 +70,5 @@ func Scale(v *__vertex, f float64) {
 
 func main() {
 	methodFunc()
+	println(sum2(1, 2, 3, 4, 5, 6, 7, 8, 9))
 }
