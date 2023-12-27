@@ -26,7 +26,7 @@ func testGoroutine() {
 }
 
 func testChan() {
-	// 信道
+	// 信道 无缓冲的
 	ch := make(chan int)
 	s := []int{1, 2, 3, 4, 5, 6}
 	//默认情况下，发送和接收操作在另一端准备好之前都会阻塞。
@@ -337,6 +337,77 @@ func multiSendersAndMultiReceivers() {
 	wgReceivers.Wait()
 	log.Println("stopped by", stoppedBy)
 }
+func startMillionRoutine() {
+	for i := 0; i < 1000000; i++ {
+		go func(n int) {
+			for {
+				fmt.Printf("goroutine: #%d\n", n)
+				time.Sleep(time.Second)
+			}
+		}(i)
+	}
+	// 主死从随
+	time.Sleep(time.Second * 10)
+}
+
+var total int
+var wg sync.WaitGroup
+
+// 互斥锁
+var lockMutex sync.Mutex
+
+// 读写锁  绝大多数都是读多写少 读的时候不用上锁 写的时候上锁
+var lockRW sync.RWMutex
+
+func read() {
+	defer wg.Done()
+	lockRW.RLock()
+	time.Sleep(time.Second)
+	lockRW.RUnlock()
+	fmt.Println("读取成功 " + strconv.Itoa(total))
+}
+func write() {
+	defer wg.Done()
+	lockRW.Lock()
+	total += 999
+	time.Sleep(time.Second)
+	lockRW.Unlock()
+	fmt.Println("修改成功 " + strconv.Itoa(total))
+}
+
+func _add() {
+	defer wg.Done()
+	for i := 1; i < 10000; i++ {
+		lockMutex.Lock()
+		total += 1
+		lockMutex.Unlock()
+	}
+}
+func _minus() {
+	defer wg.Done()
+	for i := 1; i < 10000; i++ {
+		lockMutex.Lock()
+		total -= 1
+		lockMutex.Unlock()
+	}
+}
+func useTotal() {
+	wg.Add(2)
+	go _add()
+	go _minus()
+	wg.Wait()
+	fmt.Println(total)
+}
+func useRwLock() {
+	wg.Add(10)
+	for i := 0; i < 8; i++ {
+		go read()
+	}
+	for i := 0; i < 2; i++ {
+		go write()
+	}
+	wg.Wait()
+}
 func main() {
 	//testGoroutine()
 	//testChan()
@@ -346,5 +417,8 @@ func main() {
 	//fmt.Println("archive:", runtime.GOOS)
 	//oneSenderAndMultiReceivers()
 	//multiSendersAndOneReceiver()
-	multiSendersAndMultiReceivers()
+	//multiSendersAndMultiReceivers()
+	//startMillionRoutine()
+	//useTotal()
+	useRwLock()
 }
