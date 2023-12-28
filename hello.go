@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"math"
 	"math/cmplx"
+	"reflect"
 	"strconv"
+	"unsafe"
 )
 
 // 函数外的每个语句都必须以关键字开始（var, func 等等），因此 := 结构不能在函数外使用
@@ -66,7 +68,7 @@ func euler() {
 	fmt.Printf("%.3f\n", cmplx.Exp(1i*math.Pi)+1)
 }
 
-// 类型转换 强制类型转换
+// 类型转换 标准转换
 // 表达式 T(v) 将值 v 转换为类型 T
 func triangle() {
 	fmt.Println(">>>>>>>>>> 强制类型转换 >>>>>>>>>>")
@@ -74,6 +76,23 @@ func triangle() {
 	var c int
 	c = int(math.Sqrt(math.Pow(float64(a), 2) + math.Pow(float64(b), 2)))
 	fmt.Println(c)
+}
+
+// 通过unsafe和reflect包，可以实现另外一种转换方式，我们将之称为强转换
+
+// String2Bytes 字符串转换byte[]
+func String2Bytes(s string) []byte {
+	sh := (*reflect.StringHeader)(unsafe.Pointer(&s))
+	bh := reflect.SliceHeader{
+		Data: sh.Data,
+		Len:  sh.Len,
+		Cap:  sh.Len,
+	}
+	return *(*[]byte)(unsafe.Pointer(&bh))
+}
+
+func Bytes2String(b []byte) string {
+	return *(*string)(unsafe.Pointer(&b))
 }
 
 // 常量

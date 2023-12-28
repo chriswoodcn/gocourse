@@ -30,8 +30,24 @@ func printFile(filename string) {
 		fmt.Println(scanner.Text())
 	}
 }
-
+func env() {
+	environ := os.Environ()
+	for _, v := range environ {
+		fmt.Println(v)
+	}
+}
+func readFile() {
+	file, err := os.ReadFile("aaa.txt")
+	if err != nil {
+		fmt.Println("ReadFile Err")
+	}
+	for _, v := range file {
+		println(string(v))
+	}
+}
 func main() {
-	testIoRead()
-	printFile("aaa.txt")
+	//testIoRead()
+	//printFile("aaa.txt")
+	//env()
+	readFile()
 }
