@@ -1,6 +1,7 @@
 package main
 
 import (
+	context2 "context"
 	"fmt"
 	"log"
 	"math/rand"
@@ -408,6 +409,44 @@ func useRwLock() {
 	}
 	wg.Wait()
 }
+func useContextCancel() {
+	context, cancel := context2.WithCancel(context2.Background())
+	wg.Add(1)
+	go func(context context2.Context) {
+		defer wg.Done()
+		for {
+			select {
+			case <-context.Done():
+				fmt.Println("context done,return goroutine")
+				return
+			default:
+				fmt.Println("continue goroutine trick")
+				time.Sleep(time.Second)
+			}
+		}
+	}(context)
+	time.Sleep(time.Second * 3)
+	cancel()
+	wg.Wait()
+}
+func useContextTimeout() {
+	context, _ := context2.WithTimeout(context2.Background(), time.Second*5)
+	wg.Add(1)
+	go func(context context2.Context) {
+		defer wg.Done()
+		for {
+			select {
+			case <-context.Done():
+				fmt.Println("context done,return goroutine")
+				return
+			default:
+				fmt.Println("continue goroutine trick")
+				time.Sleep(time.Second)
+			}
+		}
+	}(context)
+	wg.Wait()
+}
 func main() {
 	//testGoroutine()
 	//testChan()
@@ -415,10 +454,15 @@ func main() {
 	//fmt.Println("cpus:", runtime.NumCPU())
 	//fmt.Println("goroot:", runtime.GOROOT())
 	//fmt.Println("archive:", runtime.GOOS)
+	// 一个发送者和多个接受者  由发送者关闭管道
 	//oneSenderAndMultiReceivers()
+	// 多个发送者和一个接受者  由接受者关闭管道
 	//multiSendersAndOneReceiver()
+	// 多个发送者和多个接受者  增加一个仲裁者关闭管道
 	//multiSendersAndMultiReceivers()
 	//startMillionRoutine()
 	//useTotal()
-	useRwLock()
+	//useRwLock()
+	//useContextCancel()
+	useContextTimeout()
 }
