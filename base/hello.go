@@ -1,10 +1,9 @@
-package main
+package base
 
 import (
 	"fmt"
 	"math"
 	"math/cmplx"
-	"strconv"
 	"unsafe"
 )
 
@@ -26,8 +25,8 @@ var (
 	}{"Kim", 22}
 )
 
-// 定义变量
-func variables() {
+// Variables 定义变量
+func Variables() {
 	fmt.Println(">>>>>>>>>> 定义变量 >>>>>>>>>>")
 	fmt.Printf("全局变量： %d %t %v \n", aaa, bbb, bbb)
 	fmt.Printf("map %v %#v\n", ccc, ccc)
@@ -57,8 +56,8 @@ func variables() {
 	fmt.Printf("v is of type %T\n", v)
 }
 
-// 验证欧拉公式
-func euler() {
+// Euler 验证欧拉公式
+func Euler() {
 	fmt.Println(">>>>>>>>>> 验证欧拉公式 >>>>>>>>>>")
 	c := 3 + 4i
 	abs := cmplx.Abs(c)
@@ -69,7 +68,7 @@ func euler() {
 
 // 类型转换 标准转换
 // 表达式 T(v) 将值 v 转换为类型 T
-func triangle() {
+func Triangle() {
 	fmt.Println(">>>>>>>>>> 强制类型转换 >>>>>>>>>>")
 	var a, b int = 3, 4
 	var c int
@@ -96,8 +95,8 @@ func Bytes2String(b []byte) string {
 	return *(*string)(unsafe.Pointer(&b))
 }
 
-// 常量
-func constants() {
+// Constants 常量
+func Constants() {
 	fmt.Println(">>>>>>>>>> 定义常量 >>>>>>>>>>")
 	//常量不能用 := 语法声明。
 	const (
@@ -135,20 +134,20 @@ func constants() {
 	)
 }
 
-// 函数
-func add(x, y int) int {
+// Add 函数
+func Add(x, y int) int {
 	fmt.Println(">>>>>>>>>> 函数形参类型相同时，除最后一个类型以外，其它都可以省略 >>>>>>>>>>")
 	return x + y
 }
 
-// 函数
-func swap(x, y string) (string, string) {
+// Swap 函数
+func Swap(x, y string) (string, string) {
 	fmt.Println(">>>>>>>>>> 函数可以返回任意数量的返回值 >>>>>>>>>>")
 	return y, x
 }
 
-// 函数 命明返回值
-func split(sum int) (x, y int) {
+// Split 函数 命明返回值
+func Split(sum int) (x, y int) {
 	x = sum * 4 / 9
 	y = sum - x
 	return
@@ -171,13 +170,3 @@ func split(sum int) (x, y int) {
 // 数值类型为 0，
 // 布尔类型为 false，
 // 字符串为 ""（空字符串）。
-func main() {
-	fmt.Println("hello")
-	variables()
-	euler()
-	triangle()
-	constants()
-	fmt.Println(add(12, 15))
-	fmt.Println(swap(strconv.Itoa(12), strconv.Itoa(12)))
-	fmt.Println(split(17))
-}

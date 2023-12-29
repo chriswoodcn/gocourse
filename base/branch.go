@@ -1,4 +1,4 @@
-package main
+package base
 
 import (
 	"fmt"
@@ -9,8 +9,8 @@ import (
 	"time"
 )
 
-// if条件
-func convert2bin(n int) string {
+// Convert2bin if条件
+func Convert2bin(n int) string {
 	fmt.Println(">>>>>>>>>> if条件 >>>>>>>>>>")
 	result := ""
 	for ; n > 0; n /= 2 {
@@ -23,8 +23,8 @@ func convert2bin(n int) string {
 	return result
 }
 
-// for循环
-func loop() {
+// Loop for循环
+func Loop() {
 	//Go 只有一种循环结构：for 循环
 	fmt.Println(">>>>>>>>>> for 循环 >>>>>>>>>>")
 	sum := 0
@@ -43,7 +43,7 @@ func loop() {
 }
 
 // if条件
-func ifFunc() {
+func IfFunc() {
 	//Go 的 if 语句与 for 循环类似，表达式外无需小括号 ( ) ，而大括号 { } 则是必须的。
 	//同 for 一样， if 语句可以在条件表达式前执行一个简单的语句。 该语句声明的变量作用域仅在 if 之内
 	if file, err := os.ReadFile("aa.txt"); err == nil {
@@ -54,8 +54,8 @@ func ifFunc() {
 	}
 }
 
-// 牛顿法计算平方根
-func sqrt(x float64) float64 {
+// Sqrt 牛顿法计算平方根
+func Sqrt(x float64) float64 {
 	z := 1.0
 	for i := 0; i <= 10; i++ {
 		z -= (z*z - x) / (2 * z)
@@ -63,8 +63,8 @@ func sqrt(x float64) float64 {
 	return z
 }
 
-// switch函数
-func switchFunc() {
+// SwitchFunc switch函数
+func SwitchFunc() {
 	fmt.Println(">>>>>>>>>> switch函数 >>>>>>>>>>")
 	switch os := runtime.GOOS; os {
 	case "darwin":
@@ -104,8 +104,8 @@ func switchFunc() {
 	}
 }
 
-// defer函数
-func deferFunc() {
+// DeferFunc defer函数
+func DeferFunc() {
 	//defer 语句会将函数推迟到外层函数返回之后执行。
 	//推迟调用的函数其  参数会立即求值，但直到外层函数返回前该函数都不会被调用。
 	defer fmt.Println("world")
@@ -116,12 +116,4 @@ func deferFunc() {
 		defer fmt.Println(i)
 	}
 	fmt.Println("done")
-}
-func main() {
-	fmt.Println(convert2bin(25))
-	loop()
-	ifFunc()
-	fmt.Println(sqrt(2))
-	switchFunc()
-	deferFunc()
 }

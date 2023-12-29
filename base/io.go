@@ -1,4 +1,4 @@
-package main
+package base
 
 import (
 	"bufio"
@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func testIoRead() {
+func TestIoRead() {
 	r := strings.NewReader("Hello, Reader!")
 	b := make([]byte, 32)
 	for {
@@ -20,23 +20,23 @@ func testIoRead() {
 		}
 	}
 }
-func printFile(filename string) {
-	file, err := os.Open(filename)
+func PrintFile() {
+	file, err := os.Open("aaa.txt")
 	if err != nil {
-		panic("printFile os.OpenFile error ")
+		fmt.Println("OpenFile Err")
 	}
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		fmt.Println(scanner.Text())
 	}
 }
-func env() {
+func Env() {
 	environ := os.Environ()
 	for _, v := range environ {
 		fmt.Println(v)
 	}
 }
-func readFile() {
+func ReadFile() {
 	file, err := os.ReadFile("aaa.txt")
 	if err != nil {
 		fmt.Println("ReadFile Err")
@@ -44,10 +44,4 @@ func readFile() {
 	for _, v := range file {
 		println(string(v))
 	}
-}
-func main() {
-	//testIoRead()
-	//printFile("aaa.txt")
-	//env()
-	readFile()
 }
