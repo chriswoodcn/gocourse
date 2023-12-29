@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math"
 	"math/cmplx"
-	"reflect"
 	"strconv"
 	"unsafe"
 )
@@ -82,13 +81,15 @@ func triangle() {
 
 // String2Bytes 字符串转换byte[]
 func String2Bytes(s string) []byte {
-	sh := (*reflect.StringHeader)(unsafe.Pointer(&s))
-	bh := reflect.SliceHeader{
-		Data: sh.Data,
-		Len:  sh.Len,
-		Cap:  sh.Len,
-	}
-	return *(*[]byte)(unsafe.Pointer(&bh))
+	//sh := (*reflect.StringHeader)(unsafe.Pointer(&s))
+	//bh := reflect.SliceHeader{
+	//    Data: sh.Data,
+	//    Len:  sh.Len,
+	//    Cap:  sh.Len,
+	//}
+	pointer := unsafe.Pointer(&s)
+	sh := unsafe.String((*byte)(pointer), len(s))
+	return *(*[]byte)(unsafe.Pointer(&sh))
 }
 
 func Bytes2String(b []byte) string {
