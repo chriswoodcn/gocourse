@@ -17,6 +17,14 @@ func (t *TreeNode) print() {
 	}
 	fmt.Println(t.value)
 }
+func (t *TreeNode) traverse() {
+	if t == nil {
+		return
+	}
+	fmt.Print(t.value, " ")
+	t.left.traverse()
+	t.right.traverse()
+}
 func main() {
 	node := TreeNode{value: 10}
 	node.left = &TreeNode{}
@@ -24,7 +32,8 @@ func main() {
 	node.right.left = new(TreeNode) //无论是指针还是结构体都是点语法
 	node.print()
 	node.left.left.print()
-
+	node.traverse()
+	println("")
 	var nodes = []TreeNode{
 		{1, nil, nil},
 		{},
