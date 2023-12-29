@@ -36,6 +36,8 @@ func main() {
 	node2.Left = &tree.Node{}
 	node2.Right = &tree.Node{Value: 11}
 	node2.Right.Left = new(tree.Node)
+	node2.Traverse()
+	node2.Node.Traverse()
 	node2.PostTraverse()
 	println("")
 }
