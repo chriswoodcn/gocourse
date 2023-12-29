@@ -23,5 +23,8 @@ func main() {
 	}
 
 	// Print the AST.
-	ast.Print(set, f)
+	err = ast.Print(set, f)
+	if err != nil {
+		return
+	}
 }
