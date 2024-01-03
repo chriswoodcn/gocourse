@@ -43,7 +43,6 @@ func writeFile(filename string) {
 		//	fmt.Println(pathError.Path)
 		//	fmt.Println(pathError.Err)
 		//}
-
 		var path *os.PathError
 		if errors.As(err, &path) {
 			fmt.Println(path)
