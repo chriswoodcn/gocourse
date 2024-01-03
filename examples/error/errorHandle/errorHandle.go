@@ -11,6 +11,12 @@ type AppHandler func(http.ResponseWriter, *http.Request) error
 
 func ErrorWrap(handler AppHandler) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("recover error: %s", r)
+				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			}
+		}()
 		err := handler(w, r)
 		if err != nil {
 			log.SetFormatter(&log.TextFormatter{
@@ -20,7 +26,7 @@ func ErrorWrap(handler AppHandler) func(http.ResponseWriter, *http.Request) {
 				FullTimestamp:   true,
 				TimestampFormat: time.RFC3339,
 			})
-			log.Warnf("request error: %s", err)
+			log.Errorf("request error: %s", err)
 			switch {
 			case os.IsNotExist(err):
 				http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)

@@ -13,7 +13,7 @@ func ejectError() {
 	fmt.Println(err1)
 }
 func startWeb() {
-	http.HandleFunc("/list/", errorHandle.ErrorWrap(filelist.HandleFileList))
+	http.HandleFunc("/", errorHandle.ErrorWrap(filelist.HandleFileList))
 	err := http.ListenAndServe(":8888", nil)
 	if err != nil {
 		return
