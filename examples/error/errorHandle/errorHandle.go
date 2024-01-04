@@ -1,6 +1,7 @@
 package errorHandle
 
 import (
+	"errors"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"os"
@@ -8,12 +9,16 @@ import (
 )
 
 type AppHandler func(http.ResponseWriter, *http.Request) error
+type WebError interface {
+	error
+	Message() string
+}
 
 func ErrorWrap(handler AppHandler) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if r := recover(); r != nil {
-				log.Errorf("recover error: %s", r)
+				log.Errorf("panic error: %s", r)
 				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			}
 		}()
@@ -33,7 +38,12 @@ func ErrorWrap(handler AppHandler) func(http.ResponseWriter, *http.Request) {
 			case os.IsPermission(err):
 				http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 			default:
-				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+				var webError WebError
+				if errors.As(err, &webError) {
+					http.Error(w, webError.Message(), http.StatusBadRequest)
+				} else {
+					http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+				}
 			}
 			return
 		}
