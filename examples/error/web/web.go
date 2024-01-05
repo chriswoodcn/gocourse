@@ -1,10 +1,10 @@
 package main
 
 import (
-	"cn.chriswood/gocourse/examples/error/errorHandle"
-	"cn.chriswood/gocourse/examples/error/filelist"
 	"errors"
 	"fmt"
+	"github.com/chriswoodcn/gocourse/examples/error/errorHandle"
+	"github.com/chriswoodcn/gocourse/examples/error/filelist"
 	"net/http"
 )
 

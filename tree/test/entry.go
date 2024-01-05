@@ -1,8 +1,8 @@
 package main
 
 import (
-	"cn.chriswood/gocourse/tree"
 	"fmt"
+	"github.com/chriswoodcn/gocourse/tree"
 )
 
 func main() {

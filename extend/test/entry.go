@@ -1,9 +1,9 @@
 package main
 
 import (
-	"cn.chriswood/gocourse/extend"
-	"cn.chriswood/gocourse/tree"
 	"fmt"
+	"github.com/chriswoodcn/gocourse/extend"
+	"github.com/chriswoodcn/gocourse/tree"
 )
 
 func main() {

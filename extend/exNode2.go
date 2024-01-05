@@ -1,8 +1,8 @@
 package extend
 
 import (
-	"cn.chriswood/gocourse/tree"
 	"fmt"
+	"github.com/chriswoodcn/gocourse/tree"
 )
 
 // ExNode2 使用内嵌类型来扩展
