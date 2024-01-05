@@ -1,4 +1,5 @@
 // go build -o so.so -buildmode=c-shared so.go
+
 package main
 
 import "C"

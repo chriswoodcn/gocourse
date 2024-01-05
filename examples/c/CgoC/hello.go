@@ -1,4 +1,5 @@
 // go build -o hello.so -buildmode=c-shared .
+
 package main
 
 /*
