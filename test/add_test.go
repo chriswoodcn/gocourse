@@ -114,9 +114,13 @@ func FuzzSliceSum(f *testing.F) {
 // -cpuprofile=$FILE
 // -memprofile=$FILE, -memprofilerate=N 调整记录速率为原来的 1/N。
 // -blockprofile=$FILE
-// go test -bench 'Fib1$' -cpuprofile cpu.pprof .
-// go tool pprof -text cpu.pprof
+// go test -bench 'Fib1$' -cpuprofile cpu.out .
+// go tool pprof cpu.out   ->  help  -> command options(web/text/tree/png...)
+// go tool pprof -text cpu.out
 // pprof 支持多种输出格式（图片、文本、Web等），直接在命令行中运行 go tool pprof 即可看到所有支持的选项：
+
+// 进行性能调优
+// -cpuprofile cpu.out ->  go tool pprof cpu.out -> 分析慢的地方（最大的框和最大的箭头） -> 进行优化 -> -cpuprofile cpu.out
 func BenchmarkFib1(b *testing.B) {
 	time.Sleep(time.Second * 1) // 模拟耗时准备任务
 	b.ResetTimer()              // 重置定时器 把之前的耗时排除在计算之外
