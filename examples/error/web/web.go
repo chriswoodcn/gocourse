@@ -12,6 +12,9 @@ func ejectError() {
 	err1 := errors.New("this is customer error")
 	fmt.Println(err1)
 }
+
+var server *http.Server
+
 func startWeb() {
 	http.HandleFunc("/", errorHandle.ErrorWrap(filelist.HandleFileList))
 	err := http.ListenAndServe(":8888", nil)

@@ -13,15 +13,18 @@ import (
 func errPanic(http.ResponseWriter, *http.Request) error {
 	panic("errPanic")
 }
+
+var tests = []struct {
+	handler errorHandle.AppHandler
+	code    int
+	message string
+}{
+	{errPanic, 500, http.StatusText(500)},
+	{filelist.HandleFileList, http.StatusOK, http.StatusText(http.StatusOK)},
+}
+
+// 模拟response和request 测试handler
 func TestErrorWrap(t *testing.T) {
-	tests := []struct {
-		handler errorHandle.AppHandler
-		code    int
-		message string
-	}{
-		{errPanic, 500, http.StatusText(500)},
-		{filelist.HandleFileList, http.StatusOK, http.StatusText(http.StatusOK)},
-	}
 	for _, tt := range tests {
 		tar := errorHandle.ErrorWrap(tt.handler)
 		res := httptest.NewRecorder()
@@ -30,4 +33,18 @@ func TestErrorWrap(t *testing.T) {
 		all, _ := io.ReadAll(res.Body)
 		fmt.Printf("response code: %d  body: %s\n", res.Code, string(all))
 	}
+}
+
+// 模拟开启一个server测试
+func TestServer(t *testing.T) {
+	for _, tt := range tests {
+		tar := errorHandle.ErrorWrap(tt.handler)
+		server := httptest.NewServer(http.HandlerFunc(tar))
+		fmt.Println(server)
+		//res, _ := http.Get(server.URL)
+		res, _ := http.Get(server.URL + "/list/aaa.txt")
+		all, _ := io.ReadAll(res.Body)
+		fmt.Printf("response code: %d  body: %s\n", res.StatusCode, string(all))
+	}
+
 }
