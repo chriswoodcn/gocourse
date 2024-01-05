@@ -31,7 +31,7 @@ func ErrorWrap(handler AppHandler) func(http.ResponseWriter, *http.Request) {
 				FullTimestamp:   true,
 				TimestampFormat: time.RFC3339,
 			})
-			log.Errorf("request error: %s", err)
+			log.Errorf("request url : %s  method: %s error: %s", r.URL.Path, r.Method, err)
 			switch {
 			case os.IsNotExist(err):
 				http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
