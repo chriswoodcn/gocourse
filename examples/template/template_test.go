@@ -1,4 +1,4 @@
-package main
+package template
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"testing"
 	"time"
 )
 
@@ -28,7 +29,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-func main() {
+func TestTemplate(t *testing.T) {
 	dir, _ := os.Getwd()
 	fmt.Println("dir:", dir)
 	http.HandleFunc("/template/index", handler)

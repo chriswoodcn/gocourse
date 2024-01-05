@@ -1,4 +1,4 @@
-package main
+package str
 
 import (
 	"bufio"
@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"testing"
 	"unicode/utf8"
 )
 
@@ -60,12 +61,12 @@ func writeFile(filename string) {
 		fmt.Fprintf(writer, "%d \n", fibonacci())
 	}
 }
-func testFibonacci() {
+func TestFibonacci1(t *testing.T) {
 	fibonacci := Fibonacci()
 	for i := 0; i < 10; i++ {
 		fmt.Println(fibonacci())
 	}
 }
-func main() {
+func TestFibonacci2(t *testing.T) {
 	writeFile("fibonacci.txt")
 }

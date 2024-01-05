@@ -1,8 +1,9 @@
-package main
+package complex
 
 import (
 	"fmt"
 	"math"
+	"testing"
 	"time"
 )
 
@@ -26,7 +27,7 @@ type Vertex struct {
 func (v *Vertex) Abs() float64 {
 	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
-func testInterface() {
+func TestInterface(t *testing.T) {
 	var a Abser
 	f := MyFloat(-math.Sqrt2)
 	v := Vertex{3, 4}
@@ -84,7 +85,7 @@ func describe2(i interface{}) {
 // 空接口
 // 指定了零个方法的接口值被称为 *空接口：*
 // interface{}
-func testEmptyInterface() {
+func TestEmptyInterface(t *testing.T) {
 	var i interface{}
 	i = 42
 	describe2(i)
@@ -92,7 +93,7 @@ func testEmptyInterface() {
 	describe2(i)
 }
 
-func typeAssert() {
+func TestTypeAssert(t *testing.T) {
 	var i interface{} = "hello"
 	//该语句断言接口值 i 保存了具体类型 T，并将其底层类型为 T 的值赋予变量 t。
 	s := i.(string)
@@ -117,7 +118,7 @@ func do(i interface{}) {
 		fmt.Printf("I don't know about type %T!\n", v)
 	}
 }
-func testSwitchType() {
+func TestSwitchType(t *testing.T) {
 	do(21)
 	do("hello")
 	do(true)
@@ -131,7 +132,7 @@ type Person struct {
 func (p Person) String() string {
 	return fmt.Sprintf("%v (%v years)", p.Name, p.Age)
 }
-func testPersonStringer() {
+func TestPersonStringer(t *testing.T) {
 	a := Person{"Arthur Dent", 42}
 	z := Person{"Zaphod Beeblebrox", 9001}
 	fmt.Println(a, z)
@@ -153,16 +154,8 @@ func run() error {
 		"it didn't work",
 	}
 }
-func testError() {
+func TestError(t *testing.T) {
 	if err := run(); err != nil {
 		fmt.Println(err)
 	}
-}
-func main() {
-	testInterface()
-	testEmptyInterface()
-	typeAssert()
-	testSwitchType()
-	testPersonStringer()
-	testError()
 }

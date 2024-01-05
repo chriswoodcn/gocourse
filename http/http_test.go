@@ -1,13 +1,14 @@
-package main
+package http
 
 import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"net/http"
+	"testing"
 	"time"
 )
 
-func main() {
+func TestHttp(t *testing.T) {
 	logger, _ := zap.NewProduction()
 	url := "www.taobao.com"
 	defer logger.Sync() // flushes buffer, if any

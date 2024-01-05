@@ -1,8 +1,9 @@
-package main
+package complex
 
 import (
 	"fmt"
 	"math"
+	"testing"
 )
 
 type __vertex struct {
@@ -34,7 +35,7 @@ func methodFunc() {
 }
 
 // 也可以为非结构体类型声明方法
-// 接收者的类型定义和方法声明必须在同一包内；
+// 接收者的类型定义和方法声明必须在同一包内
 
 type myFloat float64
 
@@ -68,7 +69,7 @@ func Scale(v *__vertex, f float64) {
 	v.Y = v.Y * f
 }
 
-func main() {
+func TestMethod(t *testing.T) {
 	methodFunc()
 	println(sum2(1, 2, 3, 4, 5, 6, 7, 8, 9))
 }

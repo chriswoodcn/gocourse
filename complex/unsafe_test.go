@@ -1,11 +1,12 @@
-package main
+package complex
 
 import (
 	"fmt"
+	"testing"
 	"unsafe"
 )
 
-func testPointer() {
+func TestPointer(t *testing.T) {
 	//（1）将*T1转换为指向*T2的指针。
 	i := 30
 	ptr1 := &i
@@ -47,7 +48,4 @@ func testPointer() {
 	// Slice(ptr, len) is equivalent to  (*[len]ArbitraryType)(unsafe.Pointer(ptr))[:]
 	slice := unsafe.Slice(data, 2)
 	fmt.Println(slice) //expect 97 98
-}
-func main() {
-	testPointer()
 }

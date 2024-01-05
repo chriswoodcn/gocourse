@@ -1,51 +1,10 @@
-package main
+package str
 
 import (
 	"fmt"
-	"log"
+	"testing"
 )
 
-type BaseError struct {
-	module string
-	code   int
-	msg    string
-}
-
-func (e *BaseError) Error() string {
-	format := fmt.Sprintf(" [module] %s [code] %d [msg] %s", e.module, e.code, e.msg)
-	log.Println(format)
-	return e.msg
-}
-
-func BuildBaseError(module string, code int, msg string) error {
-	return &BaseError{
-		module,
-		code,
-		msg,
-	}
-}
-
-type SystemError struct {
-	*BaseError
-}
-
-func (e *SystemError) Error() string {
-	var b = BaseError{
-		"system",
-		e.code,
-		e.msg,
-	}
-	return b.Error()
-}
-func BuildSystemError(code int, msg string) error {
-	return &SystemError{
-		&BaseError{
-			"system",
-			code,
-			msg,
-		},
-	}
-}
 func lengthOfNonRepeatingSubStr(s string) (int, error) {
 	lastOccurred := make(map[byte]int)
 	start := 0
@@ -76,6 +35,7 @@ func lengthOfNonRepeatingSubStrRune(s string) (int, error) {
 	}
 	return maxLen, nil
 }
-func main() {
+func TestNonRepeatingSubStr(t *testing.T) {
 	fmt.Println(lengthOfNonRepeatingSubStr("abcabc"))
+	fmt.Println(lengthOfNonRepeatingSubStrRune("一二三二一"))
 }

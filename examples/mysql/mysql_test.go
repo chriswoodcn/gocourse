@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm/logger"
 	"log"
 	"os"
+	"testing"
 	"time"
 )
 
@@ -36,13 +37,12 @@ func SetConnect(db *gorm.DB) error {
 	if err != nil {
 		return err
 	}
-
 	sqlDB.SetMaxOpenConns(100)                 // 设置数据库的最大打开连接数
 	sqlDB.SetMaxIdleConns(100)                 // 设置最大空闲连接数
 	sqlDB.SetConnMaxLifetime(10 * time.Second) // 设置空闲连接最大存活时间
 	return nil
 }
-func main() {
+func TestMysql(t *testing.T) {
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 		logger.Config{

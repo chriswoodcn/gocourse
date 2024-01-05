@@ -1,10 +1,11 @@
-package main
+package complex
 
 import (
 	"fmt"
 	"math"
 	"reflect"
 	"runtime"
+	"testing"
 )
 
 type _vertex struct {
@@ -12,7 +13,7 @@ type _vertex struct {
 	Y int
 }
 
-func definePtr() {
+func TestDefinePtr(t *testing.T) {
 	//类型 *T 是指向 T 类型值的指针。其零值为 nil。
 	var p *int
 	i, j := 42, 2701
@@ -26,7 +27,7 @@ func definePtr() {
 	fmt.Println(j) // 查看 j 的值
 	//Go 没有指针运算。
 }
-func structFunc() {
+func TestStruct(t *testing.T) {
 	// 结构体
 	v := _vertex{1, 2}
 	v.X = 4
@@ -47,7 +48,7 @@ func structFunc() {
 	)
 	fmt.Println(p0, v1, v2, v3)
 }
-func arrayFunc() {
+func TestArray2(t *testing.T) {
 	//类型 [n]T 表示拥有 n 个 T 类型的值的数组。
 	var a [2]string
 	a[0] = "Hello"
@@ -77,7 +78,7 @@ func arrayFunc() {
 	fmt.Println(A, B)
 	fmt.Println(names)
 }
-func sliceFunc() {
+func TestSlice2(t *testing.T) {
 	//切片类型的写法是 []T ， T 是切片元素的类型。和数组不同的是，切片类型并没有给定固定的长度
 	//切片的字面值和数组字面值很像，不过切片没有指定元素个数
 	//切片可以使用内置函数 make 创建，函数签名为：func make([]T, len, cap) []T
@@ -174,9 +175,9 @@ func sliceFunc() {
 	//要增加切片的容量必须创建一个新的、更大容量的切片，然后将原有切片的内容复制到新的切片。
 	//整个技术是一些支持动态数组语言的常见实现。下面的例子将切片 s 容量翻倍，先创建一个2倍
 	//容量的新切片 t ，复制 s 的元素到 t ，然后将 t 赋值给 s ：
-	t := make([]int, len(s4), (cap(s4)+1)*2) // +1 in case cap(s) == 0
-	copy(t, s4)
-	s4 = t
+	tt := make([]int, len(s4), (cap(s4)+1)*2) // +1 in case cap(s) == 0
+	copy(tt, s4)
+	s4 = tt
 
 	p := []byte{2, 3, 5}
 	p = AppendByte(p, 7, 11, 13)
@@ -221,7 +222,7 @@ type vertex2 struct {
 
 var m map[string]vertex2
 
-func mapFunc() {
+func TestMap2(t *testing.T) {
 	//映射将键映射到值。
 	//映射的零值为 nil 。nil 映射既没有键，也不能添加键
 	//make 函数会返回给定类型的映射，并将其初始化备用
@@ -282,7 +283,7 @@ func apply(op func(int, int) int, a, b int) int {
 }
 
 // 闭包
-func closureFunc() {
+func TestClosureFunc(t *testing.T) {
 	//Go 函数可以是一个闭包。闭包是一个函数值，它引用了其函数体之外的变量。
 	//该函数可以访问并赋予其引用的变量的值，换句话说，该函数被这些变量“绑定”在一起。
 	//例如，函数 adder 返回一个闭包。每个闭包都被绑定在其各自的 sum 变量上
@@ -300,13 +301,4 @@ func adder() func(int) int {
 		sum += x
 		return sum
 	}
-}
-func main() {
-	//definePtr()
-	//structFunc()
-	//arrayFunc()
-	//sliceFunc()
-	//mapFunc()
-	//funFunc()
-	//closureFunc()
 }

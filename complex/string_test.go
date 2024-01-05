@@ -1,12 +1,13 @@
-package main
+package complex
 
 import (
 	"fmt"
 	"strings"
+	"testing"
 	"unicode/utf8"
 )
 
-func main() {
+func TestString(t *testing.T) {
 	str := "abc这是简单的测试"
 	for _, s := range []byte(str) {
 		fmt.Printf("%X ", s)

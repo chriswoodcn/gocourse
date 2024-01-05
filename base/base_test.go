@@ -1,39 +1,39 @@
-package main
+package base
 
 import (
 	"fmt"
-	"github.com/chriswoodcn/gocourse/base"
 	"strconv"
+	"testing"
 )
 
-func testHello() {
+func TestHello(t *testing.T) {
 	fmt.Println(">>>>>>>>>>testHello>>>>>>>>>>")
 	fmt.Println("hello")
-	base.Variables()
-	base.Euler()
-	base.Triangle()
-	base.Constants()
-	fmt.Println(base.Add(12, 15))
-	fmt.Println(base.Swap(strconv.Itoa(12), strconv.Itoa(12)))
-	fmt.Println(base.Split(17))
-	bytes := base.String2Bytes("testHello")
-	bytes2String := base.Bytes2String(bytes)
+	Variables()
+	Euler()
+	Triangle()
+	Constants()
+	fmt.Println(Add(12, 15))
+	fmt.Println(Swap(strconv.Itoa(12), strconv.Itoa(12)))
+	fmt.Println(Split(17))
+	bytes := String2Bytes("testHello")
+	bytes2String := Bytes2String(bytes)
 	fmt.Println(bytes2String)
 }
-func testBranch() {
+func TestBranch(t *testing.T) {
 	fmt.Println(">>>>>>>>>>testBranch>>>>>>>>>>")
-	fmt.Println(base.Convert2bin(25))
-	base.Loop()
-	base.IfFunc()
-	fmt.Println(base.Sqrt(2))
-	base.SwitchFunc()
-	base.DeferFunc()
+	fmt.Println(Convert2bin(25))
+	Loop()
+	IfFunc()
+	fmt.Println(Sqrt(2))
+	SwitchFunc()
+	DeferFunc()
 }
-func testIo() {
-	base.TestIoRead()
-	base.PrintFile()
-	base.Env()
-	base.ReadFile()
+func TestIo(t *testing.T) {
+	TestIoRead()
+	PrintFile()
+	Env()
+	ReadFile()
 }
 
 type Animal interface {
@@ -50,7 +50,7 @@ func (d *dog) Say() string {
 func (d *dog) Walk() {
 	fmt.Println("我走起路来非常可爱")
 }
-func testTypeAssert() {
+func TestTypeAssert(t *testing.T) {
 	fmt.Println(">>>>>>>>>>类型断言>>>>>>>>>>")
 	//注意：
 	//如果我们试图将一个非指针类型的变量转换成一个指针类型，那么.()会导致panic；
@@ -114,10 +114,4 @@ func testTypeAssert() {
 	//type myType1 = int32 和 type myType2 int32有什么区别
 	//myType1和int32底层元数据信息都是同一个， rune和int32就是这样的关系
 	//myType2属于已有数据创建的新类型，它和int32是不同的类型，底层的数据元数据信息也是不同的
-}
-func main() {
-	testHello()
-	testBranch()
-	testIo()
-	testTypeAssert()
 }
