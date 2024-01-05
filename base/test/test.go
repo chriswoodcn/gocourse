@@ -1,8 +1,8 @@
 package main
 
 import (
+	"cn.chriswood/gocourse/base"
 	"fmt"
-	"gocourse/base"
 	"strconv"
 )
 

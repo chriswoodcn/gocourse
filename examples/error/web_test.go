@@ -1,9 +1,9 @@
 package main
 
 import (
+	"cn.chriswood/gocourse/examples/error/errorHandle"
+	"cn.chriswood/gocourse/examples/error/filelist"
 	"fmt"
-	"gocourse/examples/error/errorHandle"
-	"gocourse/examples/error/filelist"
 	"io"
 	"net/http"
 	"net/http/httptest"

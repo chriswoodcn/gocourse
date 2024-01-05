@@ -1,4 +1,4 @@
-module gocourse
+module cn.chriswood/gocourse
 
 go 1.21
 

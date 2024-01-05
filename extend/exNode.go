@@ -1,8 +1,8 @@
 package extend
 
 import (
+	"cn.chriswood/gocourse/tree"
 	"fmt"
-	"gocourse/tree"
 )
 
 // ExNode 使用组合来扩展
