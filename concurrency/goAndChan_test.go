@@ -2,6 +2,7 @@ package concurrency
 
 import (
 	"fmt"
+	"math/rand"
 	"runtime"
 	"testing"
 	"time"
@@ -218,4 +219,56 @@ func worker2(id int, c chan int, done chan bool) {
 		fmt.Printf("worker %d receive from main : %c\n", id, n)
 	}
 	done <- true
+}
+func generate() chan int {
+	c := make(chan int)
+	go func() {
+		i := 0
+		for {
+			time.Sleep(time.Duration(rand.Intn(1500)) * time.Millisecond)
+			c <- i
+			i++
+		}
+	}()
+	return c
+}
+func createConsumer(id int) chan<- int {
+	c := make(chan int)
+	go func() {
+		for v := range c {
+			time.Sleep(time.Second)
+			fmt.Printf("worker %d receive from main : %d\n", id, v)
+		}
+	}()
+	return c
+}
+func TestSelectSample(t *testing.T) {
+	var g1, g2 = generate(), generate()
+	var consumer = createConsumer(0)
+	var values []int
+	tm := time.After(time.Second * 10)
+	tick := time.Tick(time.Second)
+	for {
+		var activeConsumer chan<- int //注意此处 nil的chan可以作为select的case之后
+		var activeValue int
+		if len(values) > 0 {
+			activeConsumer = consumer
+			activeValue = values[0]
+		}
+		select {
+		case n := <-g1:
+			values = append(values, n)
+		case n := <-g2:
+			values = append(values, n)
+		case activeConsumer <- activeValue: //select 中可以使用nil channel
+			values = values[1:]
+		case <-time.After(time.Millisecond * 800):
+			fmt.Println("timeout")
+		case <-tick:
+			fmt.Println("queue len is: ", len(values)) //定时器
+		case <-tm:
+			fmt.Println("byebye")
+			return
+		}
+	}
 }
