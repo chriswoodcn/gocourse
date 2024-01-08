@@ -2,6 +2,7 @@ package concurrency
 
 import (
 	"fmt"
+	"runtime"
 	"testing"
 	"time"
 )
@@ -105,15 +106,116 @@ func TestChan4(t *testing.T) {
 	fibonacci2(c2, quit)
 }
 
-func TestStartMillionRoutine(t *testing.T) {
-	for i := 0; i < 1000000; i++ {
+func TestStartMultiRoutine(t *testing.T) {
+	var a [10]int
+	for i := 0; i < 100; i++ {
 		go func(n int) {
 			for {
-				fmt.Printf("goroutine: #%d\n", n)
-				time.Sleep(time.Second)
+				//fmt.Printf("goroutine: #%d\n", n)// io操作会切换 交出控制权
+				//a[i%10]++ //一直++操作，交不出控制权，会一直停留在这里
+				a[n%10]++
+				if a[n%10] >= 10 {
+					runtime.Goexit() //退出当前协程
+				}
+				runtime.Gosched() //手动交出控制权
 			}
 		}(i)
 	}
-	// 主死从随
-	time.Sleep(time.Second * 10)
+	// 主死从随  主程序一旦结束 所有开的协程结束
+	time.Sleep(time.Second)
+	fmt.Println(a)
+}
+func TestRoutineWithTopOberveThreads(t *testing.T) {
+	for i := 0; i < 1000; i++ {
+		go func(n int) {
+			for {
+				fmt.Printf("goroutine: #%d\n", n) // io操作会切换 交出控制权
+			}
+		}(i)
+	}
+	time.Sleep(time.Minute)
+}
+
+// goroutine可能切换的点
+// 1.IO  Select
+// 2.channel
+// 3.等待锁
+// 4.函数调用（有时）
+// 5.runtime.Gosched()
+func TestChanWorker(t *testing.T) {
+	var channels [10]chan int
+	//c := make(chan int)
+	for i := 0; i < 10; i++ {
+		channels[i] = make(chan int)
+		go worker(i, channels[i])
+	}
+	for i := 0; i < 10; i++ {
+		channels[i] <- 'a' + i
+	}
+	time.Sleep(time.Second)
+}
+func worker(id int, c chan int) {
+	//for {
+	//	n, ok := <-c
+	//	if ok {
+	//		fmt.Printf("worker %d receive from main : %c\n", id, n)
+	//	} else {
+	//		fmt.Printf("worker %d closed\n", id)
+	//		runtime.Goexit()
+	//	}
+	//}
+	// 可以使用更加简便的方式
+	for n := range c {
+		fmt.Printf("worker %d receive from main : %c\n", id, n)
+	}
+}
+func TestChanCreateWorker(t *testing.T) {
+	var channels [10]chan<- int
+	//c := make(chan int)
+	for i := 0; i < 10; i++ {
+		channels[i] = createWorker(i)
+	}
+	for i := 0; i < 10; i++ {
+		channels[i] <- 'a' + i
+	}
+	time.Sleep(time.Second)
+}
+func createWorker(id int) chan<- int {
+	c := make(chan int)
+	go func() {
+		fmt.Printf("worker %d receive from main : %c\n", id, <-c)
+	}()
+	return c
+}
+func TestBufferedChan(t *testing.T) {
+	//带缓冲的信道
+	bufferCh := make(chan int, 3)
+	//可以发送三次不会deadlock
+	bufferCh <- 'a' + 1
+	bufferCh <- 'a' + 2
+	bufferCh <- 'a' + 3
+	go worker(0, bufferCh)
+	channelClose(bufferCh)
+	time.Sleep(time.Second)
+}
+
+// 注意 发送方close
+func channelClose(c chan int) {
+	close(c)
+}
+
+func TestChanWorker2(t *testing.T) {
+	c := make(chan int)
+	done := make(chan bool)
+	go worker2(0, c, done)
+	for i := 0; i < 10; i++ {
+		c <- 'a' + i
+	}
+	<-done
+}
+func worker2(id int, c chan int, done chan bool) {
+	for n := range c {
+		fmt.Printf("worker %d receive from main : %c\n", id, n)
+	}
+	done <- true
 }
