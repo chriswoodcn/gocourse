@@ -91,3 +91,42 @@ func TestConclusion(t *testing.T) {
 		fmt.Println("receive message :   ", <-a2)
 	}
 }
+
+// 任务的控制
+// 非阻塞等待
+func noBlockWait(c chan string) (string, bool) {
+	select {
+	case m := <-c:
+		return m, true
+	default:
+		return "", false
+	}
+}
+
+// 超时等待
+func timeoutWait(c chan string, timeout chan time.Time) (string, bool) {
+	select {
+	case <-timeout:
+		return "", false
+	case m := <-c:
+		return m, true
+	}
+}
+
+// 任务中断退出
+func messageGenWithGracefulExit(name string, done chan struct{}) chan string {
+	c := make(chan string)
+	go func() {
+		i := 0
+		for {
+			select {
+			case <-time.After(time.Duration(rand.Intn(3000)) * time.Millisecond):
+				c <- fmt.Sprintf("message name %s content %d", name, i)
+			case <-done:
+				return
+			}
+			i++
+		}
+	}()
+	return c
+}
