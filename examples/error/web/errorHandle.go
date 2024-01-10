@@ -1,4 +1,4 @@
-package errorHandle
+package web
 
 import (
 	"errors"

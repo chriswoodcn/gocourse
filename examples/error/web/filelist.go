@@ -1,4 +1,4 @@
-package filelist
+package web
 
 import (
 	"io"
