@@ -83,6 +83,56 @@ func Test(t *testing.T) {
 	//a2 := []int{5, 6, 4}
 	a2 := []int{5, 6, 4}
 	node2 := buildListNode(a2)
-	numbers := addTwoNumbers(node1, node2)
+	numbers := addTwoNumbers2(node1, node2)
 	traverse(numbers)
+}
+
+func addTwoNumbers2(l1 *ListNode, l2 *ListNode) *ListNode {
+	var head *ListNode
+	var tail *ListNode
+	carry := 0
+	for l1 != nil && l2 != nil {
+		n1, n2 := 0, 0
+		n1 = l1.Val
+		l1 = l1.Next
+		n2 = l2.Val
+		l2 = l2.Next
+		sum := n1 + n2 + carry
+		sum, carry = sum%10, sum/10
+		if head == nil {
+			head = &ListNode{Val: sum}
+			tail = head
+		} else {
+			tail.Next = &ListNode{Val: sum}
+			tail = tail.Next
+		}
+	}
+	for l1 != nil {
+		if carry > 0 {
+			n1 := l1.Val
+			sum := n1 + carry
+			sum, carry = sum%10, sum/10
+			tail.Next = &ListNode{Val: sum}
+		} else {
+			tail.Next = l1
+		}
+		tail = tail.Next
+		l1 = l1.Next
+	}
+	for l2 != nil {
+		if carry > 0 {
+			n2 := l2.Val
+			sum := n2 + carry
+			sum, carry = sum%10, sum/10
+			tail.Next = &ListNode{Val: sum}
+		} else {
+			tail.Next = l2
+		}
+		tail = tail.Next
+		l2 = l2.Next
+	}
+	if carry > 0 {
+		tail.Next = &ListNode{Val: carry}
+	}
+	return head
 }
