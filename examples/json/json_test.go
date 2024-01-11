@@ -54,3 +54,42 @@ func unMarshal() {
 func TestJson(t *testing.T) {
 	unMarshal()
 }
+
+func TestParseNlp(t *testing.T) {
+	res := `{
+"data": [
+    {
+        "synonym":"",
+        "weight":"0.6",
+        "word": "真丝",
+        "tag":"材质"
+    },
+    {
+        "synonym":"",
+        "weight":"0.8",
+        "word": "韩都衣舍",
+        "tag":"品牌"
+    },
+    {
+        "synonym":"连身裙;联衣裙",
+        "weight":"1.0",
+        "word": "连衣裙",
+        "tag":"品类"
+    }
+]
+}`
+	m := struct {
+		Data []struct {
+			Synonym string `json:"synonym"`
+			Weight  string `json:"weight"`
+			Word    string `json:"word"`
+			Tag     string `json:"tag"`
+		} `json:"data"`
+	}{}
+	err := json.Unmarshal([]byte(res), &m)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("%+v \n", m.Data[2])
+}
