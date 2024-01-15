@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/chriswoodcn/gocourse/examples/grpcdemo/etcd"
 	"github.com/chriswoodcn/gocourse/examples/grpcdemo/etcd/discover"
 	"github.com/chriswoodcn/gocourse/examples/grpcdemo/grpc/proto/hello"
 	"github.com/chriswoodcn/gocourse/examples/grpcdemo/grpc/server/handler"
@@ -18,12 +19,18 @@ import (
 func main() {
 
 	// 注册自定义ETCD解析器
-	etcdResolverBuilder := discover.NewEtcdResolverBuilder()
+	point := etcd.ServerEndPoint{}
+	etcdResolverBuilder := discover.NewEtcdResolverBuilder(point)
 	resolver.Register(etcdResolverBuilder)
 
-	// 使用自带的DNS解析器和负载均衡实现方式
+	//
+	serviceConfig := `{
+  "loadBalancingConfig": [ { "round_robin": {} } ],
+  "methodConfig": []
+}`
 	conn, err := grpc.Dial("etcd:///",
 		grpc.WithStatsHandler(&handler.StatsHandler{}),
+		grpc.WithDefaultServiceConfig(serviceConfig),
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic(err)
@@ -47,7 +54,7 @@ func main() {
 
 	helloServiceClient := hello.NewHelloServiceClient(conn)
 
-	for i := 0; i < 200; i++ {
+	for i := 0; i < 10; i++ {
 		time.Sleep(2 * time.Second)
 		err = SayHello(helloServiceClient) // 一元
 		if err != nil {

@@ -2,21 +2,23 @@ package discover
 
 import (
 	"context"
+	"github.com/chriswoodcn/gocourse/examples/grpcdemo/etcd"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"google.golang.org/grpc/resolver"
 	"log"
 	"time"
 )
 
-type etcdResolverBuilder struct {
+type EtcdResolverBuilder struct {
 	etcdClient *clientv3.Client
 }
 
-func NewEtcdResolverBuilder() *etcdResolverBuilder {
+// 创建新的EtcdResolverBuilder 对clientv3.Client客户端的扩展
 
+func NewEtcdResolverBuilder(sep etcd.ServerEndPoint) *EtcdResolverBuilder {
 	// 创建etcd客户端连接
 	etcdClient, err := clientv3.New(clientv3.Config{
-		Endpoints:   []string{"127.0.0.1:2379"},
+		Endpoints:   []string{sep.Url()},
 		DialTimeout: 5 * time.Second,
 	})
 
@@ -25,12 +27,12 @@ func NewEtcdResolverBuilder() *etcdResolverBuilder {
 		panic(err)
 	}
 
-	return &etcdResolverBuilder{
+	return &EtcdResolverBuilder{
 		etcdClient: etcdClient,
 	}
 }
 
-func (erb *etcdResolverBuilder) Build(target resolver.Target, cc resolver.ClientConn,
+func (erb *EtcdResolverBuilder) Build(target resolver.Target, cc resolver.ClientConn,
 	opts resolver.BuildOptions) (resolver.Resolver, error) {
 
 	// 获取指定前缀的etcd节点值
@@ -72,6 +74,6 @@ func (erb *etcdResolverBuilder) Build(target resolver.Target, cc resolver.Client
 	return es, nil
 }
 
-func (erb *etcdResolverBuilder) Scheme() string {
+func (erb *EtcdResolverBuilder) Scheme() string {
 	return "etcd"
 }
